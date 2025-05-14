@@ -1,119 +1,129 @@
 const drinkRecipe = [
-{ isImage : false, name: "lemondrop"},
-{ isImage : false, name: "Cosmopolitan"},
-{ isImage : false, name: "Negroni"},
-{ isImage : false, name: "WhiskeySour"},
-{ isImage : true,  name: "lemondrop"},
-{ isImage : true,  name: "Cosmopolitan"},
-{ isImage : true,  name: "WhiskeySour"},
-{ isImage : true,  name: "Negroni"}
-
+  { isImage: false, name: "lemondrop" },
+  { isImage: false, name: "Cosmopolitan" },
+  { isImage: false, name: "Negroni" },
+  { isImage: false, name: "WhiskeySour" },
+  { isImage: true, name: "lemondrop" },
+  { isImage: true, name: "Cosmopolitan" },
+  { isImage: true, name: "WhiskeySour" },
+  { isImage: true, name: "Negroni" },
 ];
-
 
 let selected = "";
 let matches = [];
 let timerId;
-function randomizeArray(arr){
-    return arr
+function randomizeArray(arr) {
+  return arr
     .map((value) => ({ value, sort: Math.random() }))
-    .sort((a,b) => a.sort-b.sort)
-    .map(({ value }) => value); 
+    .sort((a, b) => a.sort - b.sort)
+    .map(({ value }) => value);
 }
-
-function resetBoardEvent(){
-    const board = document.getElementById("game_board");
-    for (const child of game_board.children) {
-        child.style.backgroundColor = "white";
-        hideContents(child);
-    }
-    matches =[]
-    selected = "";
+var timeLeft = 30;
+var timerelem = document.getElementById("timer");
+function countdown() {
+  if (timeLeft === -1) {
     clearTimeout(timerId);
-    timerId = setInterval(countdown , 1000);
+    resetBoardEvent();
+  } else {
+    timerelem.innerHTML = timeLeft + " seconds remaining";
+    timeLeft--;
+  }
+}
+function resetBoardEvent() {
+  const board = document.getElementById("game_board");
+  board.innerHTML = "";
+  matches = [];
+  selected = "";
+  clearTimeout(timerId);
+  timerId = setInterval(countdown, 1000);
+  createCards();
 }
 
 function showContents(element) {
-    const textElement = element.querySelectorAll("p");
-    if (element.id.endsWith(".jpeg")) {
-        const imgElement = element.querySelectorAll("img")[0];
-        imgElement.style.display = "block";
-        textElement.innerHTML = "";
+  const textElement = element.querySelectorAll("p");
+  if (element.id.endsWith(".jpeg")) {
+    const imgElement = element.querySelectorAll("img")[0];
+    imgElement.style.display = "block";
+    textElement.innerHTML = "";
+  } else {
+    textElement.innerHTML = element.id.replace("_", "");
+  }
+}
+
+const clickCard = function (e) {
+  const elem = e.currentTarget;
+  if (!selected) {
+    if (elem.id.endsWith("false")) {
+      const img = document.createElement("img");
+      img.src = `public/${elem.id.split("_false")[0]}.jpeg`;
+      img.width = 200;
+      img.height = 200;
+      elem.innerHTML = "";
+      elem.appendChild(img);
+      selected = elem.id;
     } else {
-        textElement.innerHTML = element.id.replace("_","");
+      elem.innerHTML = elem.id.split("_true")[0];
+      selected = elem.id;
     }
-}
+    return;
+  }
 
-function hideContents(element){
-    const textElement = element.querySelectorAll("p")[0];
-    textElement.innerHTML = "?";
-    if (element.id.endsWith(".jpeg")) {
-        const imageElement = element.querySelector("jpeg")[0];
-        imgElement.style.display = "none";
-
+  if (selected.length) {
+    if (selected === elem.id) {
+      return;
     }
-}
-
-function clickEvent(e) {
-    if matches.includes(e.currentTarget.id) ||
-    matches,includes(selected)) {
-        selected = "";
-        return;
-
+    if (selected.split("_")[0] === elem.id.split("_")[0]) {
+      const img = document.createElement("img");
+      img.src = `public/${elem.id.split("_")[0]}.jpeg`;
+      img.width = 200;
+      img.height = 200;
+      elem.innerHTML = "";
+      elem.appendChild(img);
+      elem.classList += " matched_card";
+      const selectedElem = document.getElementById(selected);
+      selectedElem.classList += " matched_card";
+      elem.removeEventListener("click", clickCard);
+      selectedElem.removeEventListener("click", clickCard);
+      selected = "";
+      matches.push(selected, elem.id);
+      if (matches.length === 8) {
+        clearTimeout(timerId);
+        document.getElementById("timer").innerHTML =
+          "Congratulations, you win!";
+      }
+      return;
+    } else {
+      const originalElem = document.getElementById(selected);
+      originalElem.innerHTML = "?";
+      originalElem.style.backgroundColor = "black";
+      selected = "";
+      return;
     }
+  }
+};
 
-}
-if (selected.length){
-    const selectedElement = document.getElementByIdByID(selected);
-    if (
-        selected !== e.currentTarget.id &&
-        selected.split(".jpeg")[0] === e.currentTarget.id.split(".jpeg")[0]
-    ) {
-        selectedElement.style.backgroundColor = "yellow";
-        e.currentTarget.style.backgroundColor = "yellow";
-        matches.push(selected, e.currentTarget.id);
-        showContents(e.currentTarget);
-        selected = "";
-        set timeout((e) => {
-            const el document.querySelector("#" + selected);
-            el.style.backgroundColor = "grey";
-            el.style.backgroundColor = "grey";
-        }, 1000);
-    } else 
-        selectedElement.style.backgroundColor = "grey";
-        e.currentTarget.style.backgroundColor = "grey";
-    hideContents(selectedElement);
-    selected = "";
+const firstClick = () => {};
 
-    set timeout((e) => {
-        const el = document.querySelector("#" + selected);
-   el.style.backgroundColor = "grey";
-   el.style.backgeoundColor = "grey";
-    }, 1000);
-}
- else {
-    showContents(e.currentTarget);
-    selected = e.currentTarget.id;
-    e.currentTarget.style.backgeoundColor = "red";
-    set timeout((e) => {
-        const el = document.querySelector("#" + selected);
-        el.style.backgeoundColor = "grey";
-        el.style.backgeoundColor = "grey";
-    },1000);
-}
+const isMatch = () => {};
+
+const isNotMatch = () => {};
+
 function createCards() {
-    drinkRecipe.forEach((drink) => {
-        document
-        .getElementById("reset_button")
-        .addEventListener("click",resetBoardEvent);
-        randomizeArray(drinkData).forEach((drink) => {
-            const textElement = document.createElement("p");
-            textElement.innerHTML = "?";
-            textElement.id = drink.name;
-            textElement.classList.add("text");
-            if (drink.isImage){
-                const card = document.createElement("div");
-                const img = documents.createElement("img");
-
-            }
-        });
+  const board = document.getElementById("game_board");
+  randomizeArray(drinkRecipe).forEach((drink) => {
+    const card = document.createElement("div");
+    card.addEventListener("click", clickCard);
+    card.innerHTML = "?";
+    card.id = drink.name + "_" + drink.isImage;
+    card.classList.add("card");
+    board.appendChild(card);
+  });
+}
+function render() {
+  document
+    .getElementById("reset_button")
+    .addEventListener("click", resetBoardEvent);
+  createCards();
+  timerId = setInterval(countdown, 1000);
+}
+render();
