@@ -23,7 +23,7 @@ var timerelem = document.getElementById("timer");
 function countdown() {
   if (timeLeft === -1) {
     clearTimeout(timerId);
-    document.getElementById("timer").innerHTML = "Loser! You Stink!";
+    document.getElementById("timer").innerHTML = "Loser!     You Stink!";
   } else {
     timerelem.innerHTML = timeLeft + " seconds remaining";
     timeLeft--;
@@ -36,7 +36,7 @@ function resetBoardEvent() {
   selected = "";
   clearTimeout(timerId);
   timerId = setInterval(countdown, 1000);
-  document.getElementById("timer").innerHTML;
+  document.getElementById("timer").innerHTML = "";
   createCards();
 }
 
@@ -74,19 +74,31 @@ const clickCard = function (e) {
       return;
     }
     if (selected.split("_")[0] === elem.id.split("_")[0]) {
-      const img = document.createElement("img");
-      img.src = `public/${elem.id.split("_")[0]}.jpeg`;
-      img.width = 200;
-      img.height = 200;
-      elem.innerHTML = "";
-      elem.appendChild(img);
-      elem.classList += " matched_card";
-      const selectedElem = document.getElementById(selected);
-      selectedElem.classList += " matched_card";
-      elem.removeEventListener("click", clickCard);
-      selectedElem.removeEventListener("click", clickCard);
-      selected = "";
-      matches.push(selected, elem.id);
+      if (elem.id.endsWith("false")) {
+        const img = document.createElement("img");
+        img.src = `public/${elem.id.split("_")[0]}.jpeg`;
+        img.width = 200;
+        img.height = 200;
+        elem.innerHTML = "";
+        elem.appendChild(img);
+        elem.classList += " matched_card";
+        const selectedElem = document.getElementById(selected);
+        selectedElem.classList += " matched_card";
+        elem.removeEventListener("click", clickCard);
+        selectedElem.removeEventListener("click", clickCard);
+        selected = "";
+        matches.push(selected, elem.id);
+      } else if (elem.id.endsWith("true")) {
+        elem.innerHTML = elem.id.split("_")[0];
+        elem.classList += " matched_card";
+        const selectedElem = document.getElementById(selected);
+        selectedElem.classList += " matched_card";
+        elem.removeEventListener("click", clickCard);
+        selectedElem.removeEventListener("click", clickCard);
+        selected = "";
+        matches.push(selected, elem.id);
+      }
+
       if (matches.length === 8) {
         document.getElementById("timer").innerHTML =
           "Congratulations, you win!";
@@ -101,12 +113,6 @@ const clickCard = function (e) {
     }
   }
 };
-
-const firstClick = () => {};
-
-const isMatch = () => {};
-
-const isNotMatch = () => {};
 
 function createCards() {
   const board = document.getElementById("game_board");
