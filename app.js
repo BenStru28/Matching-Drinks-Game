@@ -23,8 +23,9 @@ var timerelem = document.getElementById("timer");
 function countdown() {
   if (timeLeft === -1) {
     clearTimeout(timerId);
-    document.getElementById("timer").innerHTML = "Loser!     You Stink!";
-    document.getElementById("timer").style.color = "red";
+    const timerElem = document.getElementById("timer");
+    timerElem.innerHTML = "Loser!     You Stink!";
+    timerElem.style.color = "red";
   } else {
     timerelem.innerHTML = timeLeft + " seconds remaining";
     timeLeft--;
@@ -102,10 +103,10 @@ const clickCard = function (e) {
         matches.push(selected, elem.id);
       }
       if (matches.length === 8) {
+        const timerElem = document.getElementById("timer");
         clearTimeout(timerId);
-        document.getElementById("timer").style.color = "green";
-        document.getElementById("timer").innerHTML =
-          "Congratulations, You Win!";
+        timerElem.style.color = "green";
+        timerElem.innerHTML = "Congratulations, You Win!";
       }
       return;
     } else {
