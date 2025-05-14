@@ -35,6 +35,7 @@ function resetBoardEvent() {
   matches = [];
   selected = "";
   clearTimeout(timerId);
+  timeLeft = 45;
   timerId = setInterval(countdown, 1000);
   document.getElementById("timer").innerHTML = "";
   createCards();
@@ -98,8 +99,8 @@ const clickCard = function (e) {
         selected = "";
         matches.push(selected, elem.id);
       }
-
       if (matches.length === 8) {
+        clearTimeout(timerId);
         document.getElementById("timer").innerHTML =
           "Congratulations, you win!";
       }
