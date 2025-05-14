@@ -1,9 +1,9 @@
 const drinkRecipe = [
-  { isImage: false, name: "lemondrop" },
+  { isImage: false, name: "Lemondrop" },
   { isImage: false, name: "Cosmopolitan" },
   { isImage: false, name: "Negroni" },
   { isImage: false, name: "WhiskeySour" },
-  { isImage: true, name: "lemondrop" },
+  { isImage: true, name: "Lemondrop" },
   { isImage: true, name: "Cosmopolitan" },
   { isImage: true, name: "WhiskeySour" },
   { isImage: true, name: "Negroni" },
@@ -24,6 +24,7 @@ function countdown() {
   if (timeLeft === -1) {
     clearTimeout(timerId);
     document.getElementById("timer").innerHTML = "Loser!     You Stink!";
+    document.getElementById("timer").style.color = "red";
   } else {
     timerelem.innerHTML = timeLeft + " seconds remaining";
     timeLeft--;
@@ -38,6 +39,7 @@ function resetBoardEvent() {
   timeLeft = 45;
   timerId = setInterval(countdown, 1000);
   document.getElementById("timer").innerHTML = "";
+  document.getElementById("timer").style.color = "black";
   createCards();
 }
 
@@ -101,8 +103,9 @@ const clickCard = function (e) {
       }
       if (matches.length === 8) {
         clearTimeout(timerId);
+        document.getElementById("timer").style.color = "green";
         document.getElementById("timer").innerHTML =
-          "Congratulations, you win!";
+          "Congratulations, You Win!";
       }
       return;
     } else {
