@@ -18,12 +18,12 @@ function randomizeArray(arr) {
     .sort((a, b) => a.sort - b.sort)
     .map(({ value }) => value);
 }
-var timeLeft = 30;
+var timeLeft = 45;
 var timerelem = document.getElementById("timer");
 function countdown() {
   if (timeLeft === -1) {
     clearTimeout(timerId);
-    resetBoardEvent();
+    document.getElementById("timer").innerHTML = "Loser! You Stink!";
   } else {
     timerelem.innerHTML = timeLeft + " seconds remaining";
     timeLeft--;
@@ -36,6 +36,7 @@ function resetBoardEvent() {
   selected = "";
   clearTimeout(timerId);
   timerId = setInterval(countdown, 1000);
+  document.getElementById("timer").innerHTML;
   createCards();
 }
 

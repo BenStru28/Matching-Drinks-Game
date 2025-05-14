@@ -40,6 +40,8 @@ body {
   cursor: crosshair;
   border-radius: 10px;
   border: white solid 10px;
+  display: flex;
+  justify-content: center;
 }
 
 .matched_card {
